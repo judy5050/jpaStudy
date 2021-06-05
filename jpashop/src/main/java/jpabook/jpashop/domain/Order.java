@@ -20,6 +20,10 @@ public class Order {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @OneToOne
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
+
     //테이블 기준으로 연관관계 매핑시 사용
 //    @Column(name ="MEMBER_ID")
 //    private Long memberId;
