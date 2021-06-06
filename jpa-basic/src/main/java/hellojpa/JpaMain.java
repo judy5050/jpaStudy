@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -283,22 +284,325 @@ public class JpaMain {
 //        }finally {
 //            em.close();
 //        }
-        try{
+        /**
+         * 단 방향 연관관계 매핑후 코드
+         */
+//        try{
+//
+//
+//            //저장
+//           Team team=new Team();
+//           team.setName("TeamA");
+//           em.persist(team);
+//
+//           Member member=new Member();
+//           member.setUsername("member1");
+//           member.setTeam(team);
+//
+//           em.persist(member);
+//
+//           //조회 쿼리 보고 싶을 때
+//           em.flush();
+//           em.clear();
+//
+//
+//
+//           //조회
+//            Member findMember = em.find(Member.class, member.getId());
+//
+//            Team findTeam=findMember.getTeam();
+//            System.out.println("findTeam = " + findTeam.getName());
+//            List<Member> members = findMember.getTeam().getMembers();
+//            for (Member m : members) {
+//                System.out.println("m.getUsername() = " + m.getUsername());
+//            }
+//
+//            tx.commit();
+//        }catch (Exception e) {
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
 
+        /**
+         * 양방향 매핑시 가장 많이 하는 실수
+         */
 
-            Member member=new Member();
-            member.setUsername("C");
-            em.persist(member);
-            System.out.println("==============");
-            System.out.println("member = " + member.getId());
-            System.out.println("==============");
+//        try{
+//
+//
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            em.persist(member);
+//
+//            //저장
+//            Team team=new Team();
+//            team.setName("TeamA");
+//            team.getMembers().add(member);
+//            em.persist(team);
+//
+//
+//
+//            em.persist(member);
+//
+//            //조회 쿼리 보고 싶을 때
+//            em.flush();
+//            em.clear();
+//
+//
+//
+//
+//
+//            tx.commit();
+//        }catch (Exception e) {
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 연관관계 매핑시 가장 많이하는 실수 해결본
+         */
+//        try{
+//
+//            //저장
+//            Team team=new Team();
+//            team.setName("TeamA");
+//            em.persist(team);
+//
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            member.changeTeam(team);
+//            em.persist(member);
+//
+//
+//
+//
+//
+//            em.persist(member);
+//
+//            //조회 쿼리 보고 싶을 때
+//            em.flush();
+//            em.clear();
+//
+//
+//
+//
+//
+//            tx.commit();
+//        }catch (Exception e) {
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 단방향 연관관계( 일이 연관관계 주인일때)
+         *
+         */
+
+//        try{
+//
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            em.persist(member);
+//
+//            Team team=new Team();
+//            team.setName("teamA");
+//            team.getMembers().add(member);
+//
+//            em.persist(team);
+//
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();;
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         *상속 관계 전략 -조인전략
+         */
+
+//        try {
+//
+//            Movie movie=new Movie();
+//            movie.setDirector("aaaa");
+//            movie.setActor("bbbb");
+//            movie.setName("바람과함께사라지다");
+//            movie.setPrice(10000);
+//            em.persist(movie);
+//
+//
+//            em.flush();
+//            em.clear();
+//
+//            Movie findMove=em.find(Movie.class,movie.getId());
+//            System.out.println("findMove = " + findMove);
+//
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * mapped superclass 예
+         */
+
+//        try {
+//
+//            Member member=new Member();
+//            member.setUsername("user1");
+//            member.setCreatedBy("kim");
+//            member.setCreatedDate(LocalDateTime.now());
+//
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+        /**
+         * 프록시 사용법 및 타입 비교 연산
+         */
+//        try {
+//
+//            Member member1=new Member();
+//            member1.setUsername("member1");
+//            em.persist(member1);
+//
+//            Member member2=new Member();
+//            member2.setUsername("member2");
+//            em.persist(member2);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Member m1=em.find(Member.class,member1.getId());
+//            Member m2=em.getReference(Member.class,member2.getId());
+//
+//            //객체비교시 ==연산 x
+//            System.out.println("(m1.getClass() ==m2.getClass()) = " + (m1.getClass() == m2.getClass()));
+//            //객체 비교시 instance of로 하기
+//            System.out.println("(m1 instanceof Member) = " + (m1 instanceof Member));
+//
+//
+////            Member findMember=em.find(Member.class,member.getId());
+////            System.out.println("findMember.id = " + findMember.getId());
+////            System.out.println("findMember.username = " + findMember.getUsername());
+//
+//            //getReferenct만 사용할 경우, db에 쿼리가 날아가지 x
+////            Member findMember = em.getReference(Member.class, member1.getId());
+////            System.out.println("findMember = " + findMember.getClass());
+////            System.out.println("findMember.id = " + findMember.getId());
+////            System.out.println("findMember.username = " + findMember.getUsername());
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 영속성 컨텍스트에 찾는 엔티티 이미 존재시, em.getReference()를 호출해도 실제 엔티티를 반환
+         */
+//        try {
+//
+//            Member member1=new Member();
+//            member1.setUsername("member1");
+//            em.persist(member1);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Member m1=em.find(Member.class,member1.getId());
+//            System.out.println("m1.getClass() = " + m1.getClass());
+//
+//            Member reference = em.getReference(Member.class, member1.getId());
+//            System.out.println("reference = " + reference.getClass());
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 영속성 컨텍스트의 도움을 받을 수 없는 준영속 상태일 때 프록시 초기화 하면 문제 발생
+         */
+//        try {
+//
+//            Member member1=new Member();
+//            member1.setUsername("member1");
+//            em.persist(member1);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Member refMember = em.getReference(Member.class, member1.getId());
+//            System.out.println("refMember = " + refMember.getClass()); //Proxy
+//
+////            em.clear();
+////            em.detach(refMember);
+////            em.close();
+//
+//            refMember.getUsername();
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 지연로딩 사용해 프록시로 조회
+         */
+
+        try {
+
+            Team team=new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Member member1=new Member();
+            member1.setUsername("member1");
+            member1.setTeam(team);
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            //멤버 조회 쿼리만 날아감
+            Member m = em.find(Member.class, member1.getId());
+
+            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
+
+            System.out.println("====================");
+            m.getTeam().getName();
+            System.out.println("====================");
+
             tx.commit();
-        }catch (Exception e) {
+        }catch (Exception e){
             tx.rollback();
+            e.printStackTrace();
+
         }finally {
             em.close();
         }
-
 
         //실제 에플리케이션 종료시 entityfactory 중단
        emf.close();
