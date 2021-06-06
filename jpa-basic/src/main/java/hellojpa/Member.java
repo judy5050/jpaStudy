@@ -2,6 +2,7 @@ package hellojpa;
 
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -203,20 +204,20 @@ public class Member extends BaseEntity{
     /**
      * 연관관계 매핑 일대 다 , 일이 연관관계 주인일 때
      */
-    @Id
-    @GeneratedValue
-    @Column(name = "MEMBER_ID")
-    private Long id;
-
-    @Column(name = "USERNAME")
-    private String username;
-
-    //일대 다 연관관계 매핑에서
-    //일이 연관관계 주인일때
-    //양방향 매핑하기 위해
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+//    @Id
+//    @GeneratedValue
+//    @Column(name = "MEMBER_ID")
+//    private Long id;
+//
+//    @Column(name = "USERNAME")
+//    private String username;
+//
+//    //일대 다 연관관계 매핑에서
+//    //일이 연관관계 주인일때
+//    //양방향 매핑하기 위해
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "TEAM_ID")
+//    private Team team;
 
     //일대일
     //연관관계 주인
@@ -233,16 +234,50 @@ public class Member extends BaseEntity{
 //    private List<Product> products=new ArrayList<>();
 
     //다대다 한걔 극복
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts=new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberProduct> memberProducts=new ArrayList<>();
+//
+//    public Team getTeam() {
+//        return team;
+//    }
+//
+//    public void setTeam(Team team) {
+//        this.team = team;
+//    }
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+    /**
+     * 임베디드 타입과 테이블 매핑
+      */
+    @Id
+    @GeneratedValue
+    @Column(name = "MEMBER_ID")
+    private Long id;
 
-    public Team getTeam() {
-        return team;
-    }
+    @Column(name = "USERNAME")
+    private String username;
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+    //기간
+    @Embedded
+    private Period workPeriod;
+
+    //주소
+    @Embedded
+    private Address homeAddress;
 
     public Long getId() {
         return id;
@@ -258,5 +293,21 @@ public class Member extends BaseEntity{
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }

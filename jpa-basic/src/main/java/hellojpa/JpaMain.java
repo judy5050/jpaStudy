@@ -608,7 +608,7 @@ public class JpaMain {
          * 영속성 전이와 고아객체
          */
 
-        try {
+//        try {
 
             //영속성 전이 사용 전
 //            Child child1=new Child();
@@ -625,38 +625,131 @@ public class JpaMain {
 //            em.persist(child2);
 
             //영속성 전이 사용 후
-            Child child1=new Child();
-            Child child2=new Child();
+//            Child child1=new Child();
+//            Child child2=new Child();
+//
+//            Parent parent=new Parent();
+//            parent.addChild(child1);
+//            parent.addChild(child2);
+//
+//            //
+//            em.persist(parent);
+//
+//            em.flush();
+//            em.clear();
+//
+//            Parent findParent = em.find(Parent.class, parent.getId());
+//
+//            //고아객체 자동 삭제 orphanRemovel =true로 할때
+//            //부모객체에서 자식 list의 어떤 인덱스 값을 지우면 자동 삭제
+////            findParent.getChildList().remove(0);
+//
+//            //CasecadeType.ALL할때 or CasecadeType.DELETE
+////            em.remove(findParent);
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
 
-            Parent parent=new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
+        /**
+         * 임베디드 타입 사용법
+         */
+//        try {
+//
+//
+//            Member member=new Member();
+//            member.setUsername("hello");
+//            member.setAddress(new Address("city","street","10"));
+//
+//
+//
+//            em.persist(member);
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
 
-            //
-            em.persist(parent);
+        /**
+         * 임베디드 값 타입 공유시 문제점
+         */
+//
+//        try {
+//
+//
+//            Address address=new Address("city","street","10000");
+//
+//            //member 와 member2가 같은 address사
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            member.setHomeAddress(address);
+//            em.persist(member);
+//
+//            Member member2=new Member();
+//            member2.setUsername("member2");
+//            member2.setHomeAddress(address);
+//            em.persist(member2);
+//
+//            //member에 해당하는 city만 변경하고 싶어 !
+//            //하지만 값 타입을 공유할 경우 member의 주소가 바뀌면 공유된 주소를 갖는 member2의 주소도 변경됨
+//            member.getHomeAddress().setCity("newCity");
+//
+//
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
 
-            em.flush();
-            em.clear();
+        /**
+         * 임베디드 값 타입 공유시 문제점 해결-값 타입 복사
+         */
 
-            Parent findParent = em.find(Parent.class, parent.getId());
 
-            //고아객체 자동 삭제 orphanRemovel =true로 할때
-            //부모객체에서 자식 list의 어떤 인덱스 값을 지우면 자동 삭제
-//            findParent.getChildList().remove(0);
+        try {
 
-            //CasecadeType.ALL할때 or CasecadeType.DELETE
-//            em.remove(findParent);
+
+            Address address=new Address("city","street","10000");
+
+            //member 와 member2가 같은 address사
+            Member member=new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(address);
+            em.persist(member);
+
+            //불변 객체에서 값을 변경하고 싶으면, 새로 생성
+            Address newAddress=new Address("NewCity", address.getStreet(), address.getZipcode());
+            member.setHomeAddress(newAddress);
+
+
+            Address copyAddress=new Address(address.getCity(), address.getStreet(), address.getZipcode());
+            Member member2=new Member();
+            member2.setUsername("member2");
+            member2.setHomeAddress(copyAddress);
+            em.persist(member2);
+
+            //member에 해당하는 city만 변경하고 싶어 !
+            //하지만 값 타입을 공유할 경우 member의 주소가 바뀌면 공유된 주소를 갖는 member2의 주소도 변경됨
+//            member.getHomeAddress().setCity("newCity");
+
+
+
             tx.commit();
         }catch (Exception e){
             tx.rollback();
-            e.printStackTrace();
-
         }finally {
             em.close();
         }
 
-        //실제 에플리케이션 종료시 entityfactory 중단
-        emf.close();
+
 
     }
 }

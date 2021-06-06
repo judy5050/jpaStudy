@@ -53,9 +53,10 @@ public class Team extends BaseEntity{
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "team")
+    //암베디드 타입과 테이블 매핑에서 Member 엔티티에서 team을 제거 했기 때문에 팀 엔티티도 수정
+//    @OneToMany(mappedBy = "team")
 //    @JoinColumn(name = "TEAM_ID")
-    private List<Member> members=new ArrayList<>();
+//    private List<Member> members=new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -73,11 +74,11 @@ public class Team extends BaseEntity{
         this.name = name;
     }
 
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
+//    public List<Member> getMembers() {
+//        return members;
+//    }
+//
+//    public void setMembers(List<Member> members) {
+//        this.members = members;
+//    }
 }
