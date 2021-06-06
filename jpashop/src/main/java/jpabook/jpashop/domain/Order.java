@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order  extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -20,6 +20,8 @@ public class Order {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    //1대1 양방향 연관관계
+    // 연관관계 주인임
     @OneToOne
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
