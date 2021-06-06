@@ -16,13 +16,13 @@ public class Order  extends BaseEntity{
     private Long id;
 
     //객체기준연관관계 매핑
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     //1대1 양방향 연관관계
     // 연관관계 주인임
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
 
@@ -30,7 +30,7 @@ public class Order  extends BaseEntity{
 //    @Column(name ="MEMBER_ID")
 //    private Long memberId;
 
-    @OneToMany(mappedBy ="order" )
+    @OneToMany(mappedBy ="order",cascade = CascadeType.ALL)
     private List<OrderItem>orderItems=new ArrayList<>();
     private LocalDateTime orderDate;
 
