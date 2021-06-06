@@ -641,7 +641,7 @@ public class JpaMain {
             Parent findParent = em.find(Parent.class, parent.getId());
 
             //고아객체 자동 삭제 orphanRemovel =true로 할때
-            //부모객체에서 자식 list의 어떤 인덱스 값을 지우면 자동 삭
+            //부모객체에서 자식 list의 어떤 인덱스 값을 지우면 자동 삭제
 //            findParent.getChildList().remove(0);
 
             //CasecadeType.ALL할때 or CasecadeType.DELETE
