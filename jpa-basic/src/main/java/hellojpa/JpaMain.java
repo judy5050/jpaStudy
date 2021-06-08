@@ -761,57 +761,66 @@ public class JpaMain {
         /**
          * 값 타입 컬렉션 사용
          */
-        try {
-            Member member=new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(new Address("homeCity","street","10000"));
-
-            member.getFavoriteFoods().add("치킨");
-            member.getFavoriteFoods().add("피자");
-            member.getFavoriteFoods().add("족발");
-
-            member.getAddressHistory().add(new AddressEntity("old1","street","10000"));
-            member.getAddressHistory().add(new AddressEntity("old2","street","10000"));
-
-            em.persist(member);
-
-            em.flush();
-            em.clear();
-
-            System.out.println("========START============");
-            //값 타입 컬렉션 조회(지연로딩)
+//        try {
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            member.setHomeAddress(new Address("homeCity","street","10000"));
+//
+//            member.getFavoriteFoods().add("치킨");
+//            member.getFavoriteFoods().add("피자");
+//            member.getFavoriteFoods().add("족발");
+//
+//            member.getAddressHistory().add(new AddressEntity("old1","street","10000"));
+//            member.getAddressHistory().add(new AddressEntity("old2","street","10000"));
+//
+//            em.persist(member);
+//
+//            em.flush();
+//            em.clear();
+//
+//            System.out.println("========START============");
+//            //값 타입 컬렉션 조회(지연로딩)
+////            Member findMember = em.find(Member.class, member.getId());
+////
+////            List<Address> addressHistory = findMember.getAddressHistory();
+////            for (Address address : addressHistory) {
+////                System.out.println("address.getCity() = " + address.getCity());
+////
+////            }
+////            Set<String> favoriteFoods = findMember.getFavoriteFoods();
+////            for (String favoriteFood : favoriteFoods) {
+////                System.out.println("favoriteFood = " + favoriteFood);
+////            }
+//            //값 타입 수정
+//            //homeCity->newCity
+//            //findMember.getHomeAddress().setCity("newCity");
 //            Member findMember = em.find(Member.class, member.getId());
+//            findMember.setHomeAddress(new Address("newCIty",findMember.getHomeAddress().getStreet(),findMember.getHomeAddress().getZipcode()));
 //
-//            List<Address> addressHistory = findMember.getAddressHistory();
-//            for (Address address : addressHistory) {
-//                System.out.println("address.getCity() = " + address.getCity());
+//            //치킨->한식
+//            findMember.getFavoriteFoods().remove("치킨");
+//            findMember.getFavoriteFoods().add("한식");
 //
-//            }
-//            Set<String> favoriteFoods = findMember.getFavoriteFoods();
-//            for (String favoriteFood : favoriteFoods) {
-//                System.out.println("favoriteFood = " + favoriteFood);
-//            }
-            //값 타입 수정
-            //homeCity->newCity
-            //findMember.getHomeAddress().setCity("newCity");
-            Member findMember = em.find(Member.class, member.getId());
-            findMember.setHomeAddress(new Address("newCIty",findMember.getHomeAddress().getStreet(),findMember.getHomeAddress().getZipcode()));
+////            findMember.getAddressHistory().remove(new Address("old1","street","10000"));
+////            findMember.getAddressHistory().add(new Address("newCity1","street","10000"));
+//
+//            tx.commit();
+//       }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
 
-            //치킨->한식
-            findMember.getFavoriteFoods().remove("치킨");
-            findMember.getFavoriteFoods().add("한식");
-
-//            findMember.getAddressHistory().remove(new Address("old1","street","10000"));
-//            findMember.getAddressHistory().add(new Address("newCity1","street","10000"));
+        try{
+            List<Member> result = em.createQuery("select m from Member m where m.username like '%kimg'", Member.class).getResultList();
 
             tx.commit();
-       }catch (Exception e){
+        }catch (Exception e){
             tx.rollback();
         }finally {
             em.close();
         }
-
-
+        emf.close();
     }
 }
 
