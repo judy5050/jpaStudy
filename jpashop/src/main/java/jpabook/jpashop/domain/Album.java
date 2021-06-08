@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class Album extends Item {
 
+
     private String artist;
     private String etc;
 
@@ -23,4 +24,5 @@ public class Album extends Item {
     public void setEtc(String etc) {
         this.etc = etc;
     }
+
 }

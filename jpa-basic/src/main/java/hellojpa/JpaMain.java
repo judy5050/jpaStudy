@@ -6,6 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[]args){
@@ -714,41 +715,101 @@ public class JpaMain {
          */
 
 
+//        try {
+//
+//
+//            Address address=new Address("city","street","10000");
+//
+//            //member 와 member2가 같은 address사
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            member.setHomeAddress(address);
+//            em.persist(member);
+//
+//            //불변 객체에서 값을 변경하고 싶으면, 새로 생성
+//            Address newAddress=new Address("NewCity", address.getStreet(), address.getZipcode());
+//            member.setHomeAddress(newAddress);
+//
+//
+//            Address copyAddress=new Address(address.getCity(), address.getStreet(), address.getZipcode());
+//            Member member2=new Member();
+//            member2.setUsername("member2");
+//            member2.setHomeAddress(copyAddress);
+//            em.persist(member2);
+//
+//            //member에 해당하는 city만 변경하고 싶어 !
+//            //하지만 값 타입을 공유할 경우 member의 주소가 바뀌면 공유된 주소를 갖는 member2의 주소도 변경됨
+////            member.getHomeAddress().setCity("newCity");
+//
+//
+//
+//            tx.commit();
+//        }catch (Exception e){
+//            tx.rollback();
+//        }finally {
+//            em.close();
+//        }
+        /**
+         * 값 동등성 비교
+         */
+//        Address address1=new Address("city","street","zipcode");
+//        Address address2=new Address("city","street","zipcode");
+//
+//        System.out.println("(address1==address2) = " + (address1==address2));
+//        System.out.println("(address1.equals(address2)) = " + (address1.equals(address2)));
+
+        /**
+         * 값 타입 컬렉션 사용
+         */
         try {
-
-
-            Address address=new Address("city","street","10000");
-
-            //member 와 member2가 같은 address사
             Member member=new Member();
             member.setUsername("member1");
-            member.setHomeAddress(address);
+            member.setHomeAddress(new Address("homeCity","street","10000"));
+
+            member.getFavoriteFoods().add("치킨");
+            member.getFavoriteFoods().add("피자");
+            member.getFavoriteFoods().add("족발");
+
+            member.getAddressHistory().add(new AddressEntity("old1","street","10000"));
+            member.getAddressHistory().add(new AddressEntity("old2","street","10000"));
+
             em.persist(member);
 
-            //불변 객체에서 값을 변경하고 싶으면, 새로 생성
-            Address newAddress=new Address("NewCity", address.getStreet(), address.getZipcode());
-            member.setHomeAddress(newAddress);
+            em.flush();
+            em.clear();
 
+            System.out.println("========START============");
+            //값 타입 컬렉션 조회(지연로딩)
+//            Member findMember = em.find(Member.class, member.getId());
+//
+//            List<Address> addressHistory = findMember.getAddressHistory();
+//            for (Address address : addressHistory) {
+//                System.out.println("address.getCity() = " + address.getCity());
+//
+//            }
+//            Set<String> favoriteFoods = findMember.getFavoriteFoods();
+//            for (String favoriteFood : favoriteFoods) {
+//                System.out.println("favoriteFood = " + favoriteFood);
+//            }
+            //값 타입 수정
+            //homeCity->newCity
+            //findMember.getHomeAddress().setCity("newCity");
+            Member findMember = em.find(Member.class, member.getId());
+            findMember.setHomeAddress(new Address("newCIty",findMember.getHomeAddress().getStreet(),findMember.getHomeAddress().getZipcode()));
 
-            Address copyAddress=new Address(address.getCity(), address.getStreet(), address.getZipcode());
-            Member member2=new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(copyAddress);
-            em.persist(member2);
+            //치킨->한식
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("한식");
 
-            //member에 해당하는 city만 변경하고 싶어 !
-            //하지만 값 타입을 공유할 경우 member의 주소가 바뀌면 공유된 주소를 갖는 member2의 주소도 변경됨
-//            member.getHomeAddress().setCity("newCity");
-
-
+//            findMember.getAddressHistory().remove(new Address("old1","street","10000"));
+//            findMember.getAddressHistory().add(new Address("newCity1","street","10000"));
 
             tx.commit();
-        }catch (Exception e){
+       }catch (Exception e){
             tx.rollback();
         }finally {
             em.close();
         }
-
 
 
     }
