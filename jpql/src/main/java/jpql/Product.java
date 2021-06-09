@@ -3,27 +3,15 @@ package jpql;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-public class Team {
+public class Product {
     @Id @GeneratedValue
     private Long id;
 
     private String name;
-
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
-
-    @OneToMany(mappedBy = "team")
-    private List<Member>members=new ArrayList<>();
+    private int price;
+    private int stockAmount;
 
     public Long getId() {
         return id;
@@ -39,5 +27,21 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getStockAmount() {
+        return stockAmount;
+    }
+
+    public void setStockAmount(int stockAmount) {
+        this.stockAmount = stockAmount;
     }
 }
