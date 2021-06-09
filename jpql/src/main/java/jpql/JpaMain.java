@@ -254,40 +254,233 @@ public class JpaMain {
 //            em.close();
 //        }
 
+//        /**
+//         * jpql 기본함수
+//         */
+//
+//        try {
+//            Team team=new Team();
+//            team.setName("teamA");
+//            em.persist(team);
+//
+//            Member member=new Member();
+//            member.setUsername("member1");
+//            member.setAge(10);
+//            member.setType(MemberType.ADMIN);
+//            member.setTeam(team);
+//            em.persist(member);
+//
+//            Member member1=new Member();
+//            member1.setUsername("member2");
+//            member1.setAge(30);
+//            member1.setTeam(team);
+//            em.persist(member1);
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<String> result = em.createQuery("select nullif(m.username,'관리자') from Member m", String.class).getResultList();
+//            List<Team> resultList = em.createQuery("select m.team from Member m", Team.class).getResultList();
+//
+//            //컬렉션 값 연관경로 from 절 명시적 조인
+//            em.createQuery("select m.username from Team t join t.members m");
+//            for (Team team1 : resultList) {
+//                System.out.println("team1 = " + team1.getMembers());
+//            }
+//            for (String s : result) {
+//                System.out.println("s = " + s);
+//            }
+//
+//            tx.commit();
+//
+//        }catch (Exception e){
+//
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
+//        /**
+//         * fetch join
+//         */
+//
+//        try {
+//            Team teamA=new Team();
+//            teamA.setName("팀A");
+//            em.persist(teamA);
+//
+//            Team teamB=new Team();
+//            teamB.setName("팀B");
+//            em.persist(teamB);
+//
+//            Member member=new Member();
+//            member.setUsername("회원1");
+//            member.setAge(10);
+//            member.setType(MemberType.ADMIN);
+//            member.setTeam(teamA);
+//            em.persist(member);
+//
+//            Member member1=new Member();
+//            member1.setUsername("회원2");
+//            member1.setAge(30);
+//            member1.setTeam(teamA);
+//            em.persist(member1);
+//
+//            Member member2=new Member();
+//            member2.setUsername("회원3");
+//            member2.setAge(30);
+//            member2.setTeam(teamB);
+//            em.persist(member2);
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<Member> result = em.createQuery("select m from Member m join  m.team", Member.class).getResultList();
+//
+//            for (Member member3 : result) {
+//                System.out.println("member3 = " + member3.getUsername()+","+member3.getTeam().getName());
+//            }
+//            tx.commit();
+//
+//        }catch (Exception e){
+//
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
+
+
+//        /**
+//         * batch
+//         */
+//
+//        try {
+//            Team teamA=new Team();
+//            teamA.setName("팀A");
+//            em.persist(teamA);
+//
+//            Team teamB=new Team();
+//            teamB.setName("팀B");
+//            em.persist(teamB);
+//
+//            Member member=new Member();
+//            member.setUsername("회원1");
+//            member.setAge(10);
+//            member.setType(MemberType.ADMIN);
+//            member.setTeam(teamA);
+//            em.persist(member);
+//
+//            Member member1=new Member();
+//            member1.setUsername("회원2");
+//            member1.setAge(30);
+//            member1.setTeam(teamA);
+//            em.persist(member1);
+//
+//            Member member2=new Member();
+//            member2.setUsername("회원3");
+//            member2.setAge(30);
+//            member2.setTeam(teamB);
+//            em.persist(member2);
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<Team> result = em.createQuery("select t from Team t", Team.class)
+//                    .setFirstResult(0)
+//                    .setMaxResults(2)
+//                    .getResultList();
+//
+//            for (Team team : result) {
+//                System.out.println("team.getName() = " + team.getName());
+//                for (Member teamMember : team.getMembers()) {
+//                    System.out.println("teamMember = " + teamMember.getUsername());
+//                }
+//
+//            }
+//            tx.commit();
+//
+//        }catch (Exception e){
+//
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
+
         /**
-         * jpql 기본함수
+         * NamedQuery
          */
 
+//        try {
+//            Team teamA=new Team();
+//            teamA.setName("팀A");
+//            em.persist(teamA);
+//
+//            Member member=new Member();
+//            member.setUsername("회원1");
+//            member.setAge(10);
+//            member.setType(MemberType.ADMIN);
+//            member.setTeam(teamA);
+//            em.persist(member);
+//
+//            Member member1=new Member();
+//            member1.setUsername("회원2");
+//            member1.setAge(30);
+//            member1.setTeam(teamA);
+//            em.persist(member1);
+//
+//            em.flush();
+//            em.clear();
+//
+//            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+//                    .setParameter("username", "회원1")
+//                    .getResultList();
+//
+//            for (Member result : resultList) {
+//                System.out.println("result = " + result);
+//            }
+//            tx.commit();
+//
+//        }catch (Exception e){
+//
+//            tx.rollback();
+//            e.printStackTrace();
+//
+//        }finally {
+//            em.close();
+//        }
+
+        /**
+         * 벌크 연산
+         */
         try {
-            Team team=new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Team teamA=new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
 
             Member member=new Member();
-            member.setUsername("member1");
+            member.setUsername("회원1");
             member.setAge(10);
             member.setType(MemberType.ADMIN);
-            member.setTeam(team);
+            member.setTeam(teamA);
             em.persist(member);
 
             Member member1=new Member();
-            member1.setUsername("member2");
+            member1.setUsername("회원2");
             member1.setAge(30);
-            member1.setTeam(team);
+            member1.setTeam(teamA);
             em.persist(member1);
 
-            em.flush();
+            int resultCount = em.createQuery("update Member m set m.age=20")
+                    .executeUpdate();
+
             em.clear();
-
-            List<String> result = em.createQuery("select nullif(m.username,'관리자') from Member m", String.class).getResultList();
-            List<Team> resultList = em.createQuery("select m.team from Member m", Team.class).getResultList();
-            for (Team team1 : resultList) {
-                System.out.println("team1 = " + team1.getMembers());
-            }
-            for (String s : result) {
-                System.out.println("s = " + s);
-            }
-
+            Member findMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember.getAge() = " + findMember.getAge());
             tx.commit();
 
         }catch (Exception e){
@@ -299,6 +492,6 @@ public class JpaMain {
             em.close();
         }
 
-
     }
+
 }
